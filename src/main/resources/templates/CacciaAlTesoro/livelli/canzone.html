@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Indovina la Canzone | Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/canzone.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Indovina la Canzone', true, null)}"></header>
+
+    <main class="dashboard-main game-container">
+        <section class="game-card">
+            <div class="section-header">
+                <p class="eyebrow">Sfida Musicale</p>
+                <h3>Ascolta e Rispondi</h3>
+                <p>Ascolta l'estratto audio e seleziona l'artista e il brano corretti. Hai un solo tentativo ogni minuto.</p>
+            </div>
+
+            <div class="music-game">
+                <div class="audio-player-container">
+                    <span class="audio-label">Lettore Audio</span>
+                    <audio id="game-audio" controls>
+                        <source th:src="@{/audio/ehvolevi.mp3}" type="audio/mpeg">
+                        Il tuo browser non supporta l'elemento audio.
+                    </audio>
+                </div>
+
+                <div class="game-form">
+                    <div class="input-group">
+                        <label for="artist-select">Artista</label>
+                        <select id="artist-select">
+                            <option value="">-- Scegli artista --</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="song-select">Canzone</label>
+                        <select id="song-select" disabled>
+                            <option value="">-- Scegli prima artista --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="feedback-area">
+                    <div id="timer-display" class="timer-display" style="display: none;">
+                        Prossimo tentativo tra: <span id="countdown">60</span>s
+                    </div>
+
+                    <div id="error-message" class="error-message" style="display: none;">
+                        ⚠️ Risposta errata! Riprova tra un minuto.
+                    </div>
+                </div>
+            </div>
+
+            <div class="completion-area">
+                <input type="hidden" id="livello-input" th:value="${livello}" />
+                <button id="complete-btn" class="cta">
+                    <span>Verifica Risposta</span>
+                    <i class="icon">➔</i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/canzone.js}"></script>
+</body>
+
+</html>

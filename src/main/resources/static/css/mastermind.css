@@ -1,0 +1,155 @@
+.mastermind-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 0;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.board {
+    background: var(--bg-2);
+    padding: 20px;
+    border-radius: 24px;
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.attempt-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 8px;
+    border-radius: 12px;
+    transition: background 0.3s ease;
+}
+
+.attempt-row.active {
+    background: rgba(45, 140, 240, 0.05);
+    border: 1px dashed var(--accent);
+}
+
+.row-number {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--ink-soft);
+    width: 20px;
+}
+
+.slots {
+    display: flex;
+    gap: 10px;
+}
+
+.slot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    border: 2px solid #ccc;
+    transition: all 0.2s ease;
+}
+
+.slot.filled {
+    border-color: rgba(0,0,0,0.1);
+    transform: scale(1.05);
+}
+
+.feedback {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    width: 40px;
+}
+
+.feedback-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #d1d5db;
+}
+
+.feedback-dot.correct {
+    background: #101828; /* Black for correct color and position */
+}
+
+.feedback-dot.partial {
+    background: #ffffff; /* White for correct color, wrong position */
+    border: 1px solid #9ca3af;
+}
+
+.color-palette {
+    display: flex;
+    gap: 12px;
+    padding: 15px;
+    background: var(--surface);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+}
+
+.palette-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.palette-btn:hover {
+    transform: scale(1.15);
+    filter: brightness(1.1);
+}
+
+.palette-btn:active {
+    transform: scale(0.95);
+}
+
+/* Same colors as Tacham */
+.color-red { background-color: #e54b4b; }
+.color-blue { background-color: #2d8cf0; }
+.color-green { background-color: #2bb673; }
+.color-yellow { background-color: #ffcc00; }
+.color-orange { background-color: #ff9900; }
+.color-purple { background-color: #9b51e0; }
+
+.controls {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+}
+
+.status-area {
+    text-align: center;
+    min-height: 40px;
+}
+
+.status-message {
+    font-weight: 700;
+    color: var(--ink-soft);
+}
+
+.status-message.error { color: #e54b4b; }
+.status-message.success { color: #2bb673; }
+
+@media (max-width: 480px) {
+    .slot {
+        width: 30px;
+        height: 30px;
+    }
+    .palette-btn {
+        width: 36px;
+        height: 36px;
+    }
+    .board {
+        padding: 12px;
+    }
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Regolamento | Caccia al Tesoro OCT</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/regolamento.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+    
+    <header th:replace="~{fragments/header :: header('Regolamento', true, ${user})}"></header>
+
+    <main class="container">
+        <section class="regolamento-section">
+            <h2 class="section-title">Regolamento della Caccia al Tesoro</h2>
+            
+            <div class="card">
+                <h3>1. Obiettivo del Gioco</h3>
+                <p>
+                    La Caccia al Tesoro delle Olimpiadi della Cultura e del Talento è una competizione a squadre che mette alla prova cultura generale, logica, velocità e spirito di collaborazione. L'obiettivo è completare tutte le tappe nel minor tempo possibile, risolvendo enigmi e trovando i QRCode nascosti per la città.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>2. Funzionamento della Gara</h3>
+                <p>
+                    Il gioco si articola in una progressione a incastro:
+                </p>
+                <ul>
+                    <li><strong>Scansione QR Code:</strong> Ogni volta che trovi e scansioni un QR code in un luogo fisico, sblocchi un nuovo gioco o enigma.</li>
+                    <li><strong>Risoluzione Enigmi:</strong> Ogni gioco completato correttamente sblocca gli indizi per raggiungere il QR code successivo.</li>
+                    <li><strong>Tappe:</strong> In totale ci sono 10 quesiti e 10 luoghi da scoprire.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>3. Classifiche e Punteggi</h3>
+                <p>
+                    La vittoria è determinata dal tempo di completamento e dal numero di tappe superate.
+                </p>
+                <div class="grid-2">
+                    <div class="sub-card">
+                        <h4>Classifica Globale</h4>
+                        <p>Include tutte le squadre partecipanti alla competizione a livello nazionale. Mostra chi è il più veloce in assoluto.</p>
+                    </div>
+                    <div class="sub-card">
+                        <h4>Classifica Regionale</h4>
+                        <p>Permette di confrontarsi con le squadre della propria sede di semifinale. La squadra prima classificata in ogni sede riceverà un premio.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>4. Premi</h3>
+                <p>
+                    Per ogni sede di semifinale (Bra, Civitavecchia, Melfi ed Enna), la squadra che si classificherà al <strong>1° posto</strong> riceverà una <strong>Gift Card Feltrinelli dal valore di 20€</strong>.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3>5. Regole di Comportamento</h3>
+                <ul>
+                    <li>È vietato manomettere o staccare i QR code, ostacolando le altre squadre.</li>
+                    <li>L'utilizzo di internet è consentito, salvo diversa indicazione per specifici enigmi.</li>
+                    <li>Ogni squadra deve rimanere unita durante tutto il percorso.</li>
+                    <li>In caso di problemi tecnici, rivolgersi immediatamente ai tutor o allo staff.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>6. Fine del Gioco</h3>
+                <p>
+                    La gara termina quando una squadra completa l'ultima tappa (10° quesito e 10° luogo). Il sistema registrerà automaticamente il tempo finale. I vincitori saranno proclamati dopo la verifica della correttezza di tutti i passaggi da parte dello staff.
+                    Il premio sarà erogato successivamente alla fine delle semifinali.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/home.js}"></script>
+</body>
+
+</html>

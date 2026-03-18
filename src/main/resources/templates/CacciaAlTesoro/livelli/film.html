@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Film | Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/film.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Sfida: Cinema', true, null)}"></header>
+
+    <main class="dashboard-main game-container">
+        <section class="game-card">
+            <div class="section-header">
+                <p class="eyebrow">Indovinello Cinematografico</p>
+                <h3>Qual è il film?</h3>
+                <p>Guarda attentamente l'immagine qui sotto e indovina da quale film è tratto.</p>
+            </div>
+
+            <div class="film-container">
+                <div class="film-image-wrapper">
+                    <img th:src="@{/photo/film.jpeg}" alt="Film Challenge" class="film-image" />
+                </div>
+
+                <div class="film-input-section">
+                    <div class="input-group">
+                        <label for="solution-input">Titolo del Film</label>
+                        <input type="text" id="solution-input" class="film-input" placeholder="Inserisci il titolo..." autocomplete="off" />
+                    </div>
+                    
+                    <input type="hidden" id="livello-input" th:value="${livello}" />
+                    
+                    <div id="error-message" class="error-message"></div>
+                    
+                    <button id="verify-btn" class="btn-verify">Verifica</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/film.js}"></script>
+</body>
+
+</html>

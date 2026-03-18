@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mastermind | Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/mastermind.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Mastermind', true, null)}"></header>
+
+    <main class="dashboard-main game-container">
+        <section class="game-card">
+            <div class="section-header">
+                <p class="eyebrow">Sfida di Logica</p>
+                <h3>Indovina il Codice</h3>
+                <p>Trova la sequenza segreta di 4 colori. Hai 8 tentativi!</p>
+                <p style="font-size: 0.85rem; color: var(--ink-soft); margin-top: 5px;">
+                    ⚫ Posizione e colore corretti | ⚪ Solo colore corretto
+                </p>
+            </div>
+
+            <div class="mastermind-game">
+                <div class="board" id="mastermind-board">
+                    <!-- 8 Rows will be generated here or defined statically -->
+                    <div th:each="i : ${#numbers.sequence(8, 1, -1)}" class="attempt-row" th:id="'row-' + ${i}">
+                        <div class="row-number" th:text="${i}">8</div>
+                        <div class="slots">
+                            <div class="slot" data-slot="0"></div>
+                            <div class="slot" data-slot="1"></div>
+                            <div class="slot" data-slot="2"></div>
+                            <div class="slot" data-slot="3"></div>
+                        </div>
+                        <div class="feedback">
+                            <div class="feedback-dot"></div>
+                            <div class="feedback-dot"></div>
+                            <div class="feedback-dot"></div>
+                            <div class="feedback-dot"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-area">
+                    <span id="status-message" class="status-message">Seleziona i colori per il tuo tentativo</span>
+                </div>
+
+                <div class="color-palette">
+                    <button class="palette-btn color-red" data-color="red" title="Rosso"></button>
+                    <button class="palette-btn color-blue" data-color="blue" title="Blu"></button>
+                    <button class="palette-btn color-green" data-color="green" title="Verde"></button>
+                    <button class="palette-btn color-yellow" data-color="yellow" title="Giallo"></button>
+                    <button class="palette-btn color-orange" data-color="orange" title="Arancione"></button>
+                    <button class="palette-btn color-purple" data-color="purple" title="Viola"></button>
+                </div>
+
+                <div class="controls">
+                    <button id="submit-guess" class="cta disabled" disabled>
+                        <span>Conferma Tentativo</span>
+                        <i class="icon">✓</i>
+                    </button>
+                    <button id="clear-guess" class="cta" style="background: #6b7280;">
+                        <span>Cancella</span>
+                        <i class="icon">✕</i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="completion-area" style="display: none;" id="completion-area">
+                <input type="hidden" id="livello-input" th:value="${livello}" />
+                <button id="complete-btn" class="cta">
+                    <span>Invia Soluzione</span>
+                    <i class="icon">➔</i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/mastermind.js}"></script>
+</body>
+
+</html>

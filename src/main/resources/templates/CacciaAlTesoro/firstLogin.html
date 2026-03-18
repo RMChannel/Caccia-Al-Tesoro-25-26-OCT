@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Benvenuto | Caccia al Tesoro</title>
+    <meta
+      name="description"
+      content="Benvenuto nella Caccia al Tesoro delle Olimpiadi della Cultura e del Talento."
+    />
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/firstLogin.css}" />
+  </head>
+  <body>
+    <div class="sunwash" aria-hidden="true"></div>
+    <header th:replace="~{fragments/header :: header('Caccia al Tesoro 2026', false, null)}"></header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-content">
+          <p class="hero-kicker">Benvenuto, esploratore!</p>
+          <h2>La tua avventura sta per iniziare.</h2>
+          <p>
+            Preparati a esplorare la città risolvendo enigmi, scansionando QR
+            code e sbloccando nuove tappe. Buona fortuna!
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal show" data-welcome-modal aria-hidden="false">
+      <div class="modal-overlay"></div>
+      <div
+        class="modal-card welcome-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="welcome-title"
+      >
+        <h3 id="welcome-title">Benvenuto nella Caccia al Tesoro!</h3>
+        <p class="welcome-intro">
+          Ecco tutto quello che devi sapere prima di partire.
+        </p>
+
+        <div class="welcome-steps">
+          <div class="welcome-step">
+            <span class="step-number">1</span>
+            <div>
+              <strong>Di cosa si tratta?</strong>
+              <p>
+                La Caccia al Tesoro è un gioco a tappe che si svolge nella
+                città. Dovrai risolvere enigmi, completare mini-giochi e
+                scansionare QR code nascosti in luoghi speciali.
+              </p>
+            </div>
+          </div>
+
+          <div class="welcome-step">
+            <span class="step-number">2</span>
+            <div>
+              <strong>Come funziona?</strong>
+              <p>
+                Inizi con 2 giochi e 2 QR code disponibili. Ogni QR code
+                scansionato sblocca un nuovo gioco, e ogni gioco completato
+                rivela la posizione del prossimo QR code. Il ciclo continua fino
+                alla prova finale!
+              </p>
+            </div>
+          </div>
+
+          <div class="welcome-step">
+            <span class="step-number">3</span>
+            <div>
+              <strong>Obiettivo</strong>
+              <p>
+                Completa tutte le 10 tappe e rispondi alla domanda finale per
+                terminare la caccia al tesoro. Ogni tappa racconta un pezzo
+                della storia legata ai luoghi della città.
+              </p>
+            </div>
+          </div>
+
+          <div class="welcome-step">
+            <span class="step-number">4</span>
+            <div>
+              <strong>Consigli utili</strong>
+              <p>
+                Esplora con attenzione, leggi ogni indizio e non sottovalutare i
+                dettagli. Collabora con il tuo team e divertiti!
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <a th:href="@{/caccia}" class="cta full welcome-cta">Continua</a>
+      </div>
+    </div>
+
+        <footer th:replace="~{fragments/footer :: footer}"></footer>
+      </body>
+    </html>
+    

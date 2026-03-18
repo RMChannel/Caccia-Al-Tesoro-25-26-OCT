@@ -1,0 +1,135 @@
+.puzzle-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    margin: 20px 0;
+}
+
+/* Container per il board e l'anteprima */
+.puzzle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.puzzle-board {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0; /* Rimosso il gap per continuità immagine */
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1 / 1;
+    background-color: var(--line);
+    border: 4px solid var(--accent);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    position: relative;
+}
+
+.puzzle-tile {
+    width: 100%;
+    height: 100%;
+    background-image: url('/caccia-al-tesoro/photo/quadro.jpeg');
+    background-size: 300% 300%;
+    cursor: pointer;
+    transition: transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Numero suggerimento */
+.tile-number {
+    position: absolute;
+    top: 5px;
+    left: 8px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    pointer-events: none;
+    font-weight: bold;
+}
+
+.puzzle-tile:hover {
+    filter: brightness(1.1);
+    z-index: 1;
+    border-color: var(--accent);
+}
+
+.puzzle-tile.empty {
+    background: #2c3e50; /* Sfondo scuro per il vuoto */
+    cursor: default;
+    border: none;
+}
+
+.puzzle-tile.empty:hover {
+    filter: none;
+}
+
+/* Anteprima immagine */
+.puzzle-preview {
+    text-align: center;
+}
+
+.preview-thumb {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    border: 2px solid var(--line);
+    margin-top: 10px;
+    background-image: url('/caccia-al-tesoro/photo/quadro.jpeg');
+    background-size: cover;
+    box-shadow: var(--shadow-sm);
+}
+
+.game-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: 700;
+    color: var(--ink);
+}
+
+.secondary-btn {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 8px 20px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+    background: var(--line);
+    transform: translateY(-2px);
+}
+
+.success-message {
+    background: #dcfce7;
+    color: #16a34a;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    border: 1px solid #2bb673;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+    .puzzle-board {
+        max-width: 300px;
+    }
+}

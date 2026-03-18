@@ -1,0 +1,187 @@
+.completed-main {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.victory-card {
+    background: var(--surface);
+    border-radius: 28px;
+    padding: 60px 40px;
+    text-align: center;
+    width: 100%;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+    animation: slideUp 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.victory-icon {
+    font-size: 80px;
+    margin-bottom: 24px;
+    display: block;
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+}
+
+.victory-title {
+    font-family: "DM Serif Display", serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: var(--ink);
+}
+
+.victory-subtitle {
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ranking-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.rank-box {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 24px;
+    transition: transform 0.3s ease;
+}
+
+.rank-box:hover {
+    transform: translateY(-5px);
+}
+
+.rank-box.highlight {
+    background: linear-gradient(135deg, #fffcf0, #fff9e6);
+    border-color: #fde68a;
+    box-shadow: 0 10px 20px rgba(251, 191, 36, 0.1);
+}
+
+.rank-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.rank-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.rank-box.highlight .rank-value {
+    color: #d97706;
+}
+
+.prize-announcement {
+    padding: 32px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+    text-align: left;
+    border: 1px solid var(--line);
+}
+
+.prize-announcement.winner {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: #2bb673;
+}
+
+.prize-announcement.winner h3 {
+    color: #16a34a;
+    font-family: "DM Serif Display", serif;
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+}
+
+.prize-announcement.not-winner {
+    background: var(--bg-2);
+}
+
+.prize-announcement.not-winner h3 {
+    color: var(--ink);
+    font-family: "DM Serif Display", serif;
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+.prize-announcement p {
+    color: var(--ink-soft);
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+.completed-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .completed-main {
+        padding: 0 16px;
+        margin: 20px auto;
+    }
+
+    .victory-card {
+        padding: 40px 24px;
+    }
+
+    .ranking-summary {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .completed-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .completed-actions .cta, 
+    .completed-actions .ghost {
+        width: 100%;
+        text-align: center;
+        padding: 14px;
+    }
+    
+    .victory-title {
+        font-size: 1.8rem;
+    }
+
+    .victory-icon {
+        font-size: 60px;
+    }
+
+    .rank-value {
+        font-size: 2rem;
+    }
+}

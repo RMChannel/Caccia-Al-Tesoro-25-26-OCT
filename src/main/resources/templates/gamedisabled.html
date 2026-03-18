@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missione Sospesa - Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/gamedisabled.css}">
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="icon" th:href="@{/photo/logo.png}">
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <div class="brand">
+            <div class="brand-mark" aria-hidden="true">OCT</div>
+            <div class="brand-text">
+                <p class="brand-eyebrow">Olimpiadi della Cultura e del Talento</p>
+                <h1 class="brand-title">Caccia al Tesoro 2026</h1>
+            </div>
+        </div>
+        <nav class="site-nav">
+            <a th:href="@{/logout}" class="cta-logout">Esci</a>
+        </nav>
+    </header>
+
+    <main class="disabled-main">
+        <div class="disabled-card">
+            <div class="disabled-icon-wrap">
+                <span>⏳</span>
+            </div>
+            <h2>Missione Sospesa</h2>
+            <p>La missione non è attualmente attiva o è stata temporaneamente sospesa dal comando. La missione riprenderà a breve.</p>
+            
+            <div class="loader-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            
+            <p style="font-size: 0.9rem; font-weight: 600;">La pagina si aggiornerà automaticamente.</p>
+            
+            <div class="actions">
+                <a th:href="@{/caccia}" class="cta">Verifica Ora</a>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/gamedisabled.js}"></script>
+</body>
+
+</html>

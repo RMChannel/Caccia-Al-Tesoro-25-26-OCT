@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="icon" th:href="@{/photo/logo.png}">
+</head>
+
+<body>
+    <div class="sunwash"></div>
+
+    <header class="site-header">
+        <div class="brand">
+            <div class="brand-mark">CT</div>
+            <div class="brand-text">
+                <div class="brand-eyebrow">Pannello di Controllo</div>
+                <div class="brand-title">Amministrazione</div>
+            </div>
+        </div>
+        <nav class="site-nav">
+            <a th:href="@{/admin}" class="active" style="color: var(--accent); font-weight: 700;">Utenti</a>
+            <a th:href="@{/admin/luoghi}">Luoghi</a>
+            <a th:href="@{/admin/support}">Supporto</a>
+            <a th:href="@{/logout}" style="color: #ef4444;">Esci</a>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Benvenuto, <span th:text="${user.username}">Admin</span></h1>
+            <div class="admin-actions">
+                <button id="toggle-game-btn" 
+                        th:class="${gameActive} ? 'cta danger' : 'cta success'" 
+                        onclick="toggleGame()">
+                    <span th:text="${gameActive} ? 'Disattiva Gioco' : 'Attiva Gioco'">Attiva Gioco</span>
+                </button>
+                <button class="cta" onclick="openModal('modal-add-user')">Aggiungi Utente</button>
+                <button class="ghost" onclick="openModal('modal-upload-csv')">Carica Squadre (CSV)</button>
+            </div>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger">
+            <span th:if="${param.error[0] == 'user_not_found'}">Errore: Utente non trovato.</span>
+            <span th:if="${param.error[0] == 'unauthorized'}">Errore: Azione non autorizzata.</span>
+            <span th:if="${param.error[0] == 'regione_not_valid'}">Errore: Regione non valida.</span>
+            <span th:if="${param.error[0] == 'user_already_exist'}">Errore: Nome utente già esistente.</span>
+            <span
+                th:unless="${param.error[0] == 'user_not_found' or param.error[0] == 'unauthorized' or param.error[0] == 'regione_not_valid' or param.error[0] == 'user_already_exist'}"
+                th:text="${'Errore: ' + param.error[0]}">Errore generico.</span>
+        </div>
+        <div th:if="${param.confirm}" class="alert alert-success">
+            <span th:if="${param.confirm[0] == 'user_removed'}">Utente eliminato con successo.</span>
+            <span th:if="${param.confirm[0] == 'user_added'}">Utente aggiunto con successo!</span>
+            <span th:if="${param.confirm[0] == 'user_edited'}">Utente modificato con successo.</span>
+            <span th:if="${param.confirm[0] == 'password_reset'}">Password resettata con successo.</span>
+        </div>
+
+        <nav class="tabs-nav">
+            <button class="tab-btn active" data-tab="gestione-utenti">Gestione Utenti (<span
+                    th:text="${totalusers}">0</span>)</button>
+            <button class="tab-btn" data-tab="utenti-online">Utenti Online (<span
+                    th:text="${numberofactiveusers}">0</span>)</button>
+        </nav>
+
+        <!-- Tab: Gestione Utenti -->
+        <section id="gestione-utenti" class="tab-content active">
+            <div class="admin-card">
+                <div class="card-header-flex">
+                    <h2>Elenco Utenti</h2>
+                    <div class="table-filters">
+                        <div class="search-input-group">
+                            <input type="text" id="userSearch" placeholder="Cerca per nome o username..." class="admin-input">
+                        </div>
+                        <div class="filter-select-group">
+                            <select id="regionFilter" class="admin-select-small">
+                                <option value="">Tutte le Regioni</option>
+                                <option value="NORD-BRA">NORD-BRA</option>
+                                <option value="CENTRO-CIVITAVECCHIA">CENTRO-CIVITAVECCHIA</option>
+                                <option value="SUD-MELFI">SUD-MELFI</option>
+                                <option value="SUD-ENNA">SUD-ENNA</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-table-container">
+                    <table class="admin-table" id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>Utente / Nome</th>
+                                <th>Regione</th>
+                                <th>Ruolo</th>
+                                <th>Online</th>
+                                <th>Progresso</th>
+                                <th>Orario completamento</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="u : ${allUsers}">
+                                <td>
+                                    <div class="user-badge">
+                                        <div class="user-avatar-small" th:text="${#strings.substring(u.username,0,1)}">U
+                                        </div>
+                                        <div>
+                                            <div style="font-weight: 700;" th:text="${u.username}">Username</div>
+                                            <div style="font-size: 0.8rem; color: var(--ink-soft);"
+                                                th:text="${u.realName}">Nome Reale</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td th:text="${u.regione}">NORD</td>
+                                <td th:text="${u.role}">USER</td>
+                                <td>
+                                    <span
+                                        th:class="${usersonline.contains(u.username) ? 'status-indicator status-online' : 'status-indicator status-offline'}"></span>
+                                    <span
+                                        th:text="${usersonline.contains(u.username) ? 'Online' : 'Offline'}">Status</span>
+                                </td>
+                                <td>
+                                    <span
+                                        th:class="${u.completed != null} ? 'status-indicator status-online' : 'status-indicator status-offline'"></span>
+                                    <span th:text="${u.completed != null} ? 'Completato' : 'In Corso'">Progresso</span>
+                                </td>
+                                <td>
+                                    <span th:if="${u.completed != null}"
+                                        th:text="${#temporals.format(u.completed, 'dd/MM/yyyy HH:mm')}"></span>
+                                    <span th:unless="${u.completed != null}" style="color: var(--ink-soft);">—</span>
+                                </td>
+                                <td>
+                                    <button class="action-btn details-user-btn" th:data-username="${u.username}">Dettagli</button>
+                                    <button class="action-btn edit-user-btn" th:data-username="${u.username}"
+                                        th:data-regione="${u.regione}" th:data-role="${u.role}">Modifica</button>
+                                    <button class="action-btn danger delete-user-btn"
+                                        th:data-username="${u.username}">Elimina</button>
+                                    
+                                    <!-- Hidden Details Data -->
+                                    <div class="user-details-data" style="display:none;">
+                                        <div class="details-section">
+                                            <h4><i class="icon">📍</i> Luoghi Sbloccati</h4>
+                                            <ul class="details-list">
+                                                <li th:each="l : ${u.unlockLuogoEntities}" class="details-item">
+                                                    <span class="item-label" th:text="'Livello ' + ${l.luogo.livello} + ': ' + ${l.luogo.nome}">Livello 1: Nome</span>
+                                                    <span th:class="${l.completed ? 'badge badge-success' : 'badge badge-warning'}" 
+                                                          th:text="${l.completed ? 'Completato' : 'In Corso'}">Stato</span>
+                                                </li>
+                                                <li th:if="${#lists.isEmpty(u.unlockLuogoEntities)}" class="details-empty">Nessun luogo sbloccato</li>
+                                            </ul>
+                                        </div>
+                                        <div class="details-section">
+                                            <h4><i class="icon">🧩</i> Quesiti Sbloccati</h4>
+                                            <ul class="details-list">
+                                                <li th:each="q : ${u.unlockQuesitoEntities}" class="details-item">
+                                                    <span class="item-label" th:text="'Livello ' + ${q.quesito.livello}">Livello 1</span>
+                                                    <span th:class="${q.completed ? 'badge badge-success' : 'badge badge-warning'}" 
+                                                          th:text="${q.completed ? 'Completato' : 'In Corso'}">Stato</span>
+                                                </li>
+                                                <li th:if="${#lists.isEmpty(u.unlockQuesitoEntities)}" class="details-empty">Nessun quesito sbloccato</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(allUsers)}">
+                                <td colspan="7" style="text-align: center; padding: 40px; color: var(--ink-soft);">
+                                    Nessun utente trovato.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modals -->
+
+        <!-- Modal: Aggiungi Utente -->
+        <div id="modal-add-user" class="modal">
+            <div class="modal-overlay" onclick="closeModal('modal-add-user')"></div>
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeModal('modal-add-user')">&times;</button>
+                <h3>Aggiungi Nuovo Utente</h3>
+                <p>Inserisci i dettagli per creare un nuovo account.</p>
+                <form th:action="@{/admin/add-user}" method="POST" class="login-form">
+                    <label>
+                        Nome Utente (Squadra)
+                        <input type="text" name="username" required minlength="3" maxlength="50"
+                            placeholder="es. SquadraAlfa">
+                    </label>
+                    <label>
+                        Nome Reale (es. Istituto)
+                        <input type="text" name="realName" required minlength="3" maxlength="50"
+                            placeholder="es. Liceo Scientifico">
+                    </label>
+                    <label>
+                        Regione
+                        <select name="regione" required class="admin-select">
+                            <option value="NORD-BRA">NORD-BRA</option>
+                            <option value="CENTRO-CIVITAVECCHIA">CENTRO-CIVITAVECCHIA</option>
+                            <option value="SUD-MELFI">SUD-MELFI</option>
+                            <option value="SUD-ENNA">SUD-ENNA</option>
+                        </select>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="admin"> Permessi di Amministratore
+                    </label>
+                    <button type="submit" class="cta full">Crea Utente</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Carica CSV -->
+        <div id="modal-upload-csv" class="modal">
+            <div class="modal-overlay" onclick="closeModal('modal-upload-csv')"></div>
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeModal('modal-upload-csv')">&times;</button>
+                <h3>Carica Squadre da CSV</h3>
+                <p>Seleziona un file CSV con le colonne in quest'ordine:
+                    <code>Nome Utente, Nome Reale, Regione (NORD-BRA/CENTRO-CIVITAVECCHIA/SUD-MELFI/SUD-ENNA)</code>.
+                </p>
+                <form th:action="@{/admin/add-users}" method="POST" enctype="multipart/form-data" class="login-form">
+                    <label>
+                        File CSV
+                        <input type="file" name="file" accept=".csv" required>
+                    </label>
+                    <div class="login-note">
+                        Verrà scaricato un nuovo CSV contenente le password generate.
+                    </div>
+                    <button type="submit" class="cta full">Carica e Genera</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Modifica Utente -->
+        <div id="modal-edit-user" class="modal">
+            <div class="modal-overlay" onclick="closeModal('modal-edit-user')"></div>
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeModal('modal-edit-user')">&times;</button>
+                <h3>Modifica Utente</h3>
+                <p>Aggiorna le informazioni per <strong id="edit-username-display"></strong>.</p>
+                <form th:action="@{/admin/edit-user}" method="POST" class="login-form">
+                    <input type="hidden" name="oldUsername" id="edit-old-username">
+                    <input type="hidden" name="username" id="edit-username">
+
+                    <label>
+                        Regione
+                        <select name="regione" id="edit-regione" required class="admin-select">
+                            <option value="NORD-BRA">NORD-BRA</option>
+                            <option value="CENTRO-CIVITAVECCHIA">CENTRO-CIVITAVECCHIA</option>
+                            <option value="SUD-MELFI">SUD-MELFI</option>
+                            <option value="SUD-ENNA">SUD-ENNA</option>
+                        </select>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="admin" id="edit-admin"> Ruolo Amministratore
+                    </label>
+                    <div style="border-top: 1px solid var(--line); margin: 10px 0; padding-top: 10px;">
+                        <label class="checkbox-label" style="color: #ef4444;">
+                            <input type="checkbox" name="reset"> Resetta progressi di gioco
+                        </label>
+                        <label class="checkbox-label" style="color: #ef4444;">
+                            <input type="checkbox" name="resetPassword"> Resetta Password
+                        </label>
+                    </div>
+                    <button type="submit" class="cta full">Salva Modifiche</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal: Password Generata -->
+        <div id="modal-confirm-password" class="modal" th:classappend="${param.password != null} ? 'show' : ''">
+            <div class="modal-overlay" onclick="closeModal('modal-confirm-password')"></div>
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeModal('modal-confirm-password')">&times;</button>
+                <h3>Password Generata</h3>
+                <p>Copia la password qui sotto. Non verrà mostrata di nuovo.</p>
+                <div class="password-display" id="generated-password-box">
+                    <code th:text="${param.password}">PASSWORD</code>
+                    <button class="copy-btn" onclick="copyPassword()">Copia</button>
+                </div>
+                <button class="ghost full" style="margin-top: 20px;" onclick="closeModal('modal-confirm-password')">Ho
+                    salvato la password</button>
+            </div>
+        </div>
+
+        <!-- Modal: Dettagli Utente -->
+        <div id="modal-user-details" class="modal">
+            <div class="modal-overlay" onclick="closeModal('modal-user-details')"></div>
+            <div class="modal-card" style="max-width: 600px;">
+                <button class="modal-close" onclick="closeModal('modal-user-details')">&times;</button>
+                <h3>Dettagli Progresso: <span id="details-username-display"></span></h3>
+                <div id="details-content" class="modal-scrollable-content">
+                    <!-- Populated via JS -->
+                </div>
+                <button class="cta full" style="margin-top: 20px;" onclick="closeModal('modal-user-details')">Chiudi</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Tab: Utenti Online -->
+    <section id="utenti-online" class="tab-content">
+        <div class="admin-card">
+            <h2>Utenti Attualmente Online</h2>
+            <ul class="online-users-list">
+                <li class="online-user-item" th:each="onlineUser : ${usersonline}">
+                    <div class="user-avatar-small" th:text="${#strings.substring(onlineUser,0,1)}">U</div>
+                    <span th:text="${onlineUser}">Username</span>
+                    <span class="status-indicator status-online" style="margin-left: auto;"></span>
+                </li>
+                <li th:if="${#lists.isEmpty(usersonline)}"
+                    style="grid-column: 1/-1; text-align: center; padding: 20px; color: var(--ink-soft);">
+                    Nessun utente online al momento.
+                </li>
+            </ul>
+        </div>
+    </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+
+</html>

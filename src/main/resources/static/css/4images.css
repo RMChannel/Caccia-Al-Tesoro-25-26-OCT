@@ -1,0 +1,217 @@
+.game-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.images-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 600px;
+}
+
+.image-box {
+    aspect-ratio: 1/1;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    background: #2a2a2a;
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.image-box:hover img {
+    transform: scale(1.05);
+}
+
+.game-input-section {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.word-display {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.letter-box {
+    width: 2.5rem;
+    height: 3rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.letter-box.revealed {
+    border-color: #2bb673;
+    background: rgba(43, 182, 115, 0.1);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    color: #3f536d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.game-input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 1rem;
+    color: #101828;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.game-input:focus {
+    outline: none;
+    border-color: #1d75d0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.btn-verify {
+    width: 100%;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, #1d75d0 0%, #0e5aa7 100%);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-verify:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(29, 117, 208, 0.4);
+}
+
+.btn-verify:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+}
+
+.error-message {
+    background: rgba(255, 77, 77, 0.1);
+    border-left: 4px solid #ff4d4d;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    color: #ff4d4d;
+    font-size: 0.95rem;
+    display: none;
+    text-align: center;
+}
+
+.timer-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 153, 0, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 153, 0, 0.2);
+    color: #ff9900;
+}
+
+.timer-icon {
+    font-size: 1.4rem;
+}
+
+@media (max-width: 480px) {
+    .word-display {
+        gap: 0.3rem;
+    }
+    .letter-box {
+        width: 2rem;
+        height: 2.5rem;
+        font-size: 1.2rem;
+    }
+}
+
+/* Fix for mobile keyboard */
+@media (max-width: 768px) and (max-height: 600px) {
+    .dashboard-main {
+        padding-top: 10px !important;
+    }
+    
+    .game-card {
+        padding: 10px !important;
+    }
+    
+    .section-header {
+        margin-bottom: 10px !important;
+    }
+    
+    .section-header p, .section-header h3 {
+        display: none;
+    }
+    
+    .section-header h3 {
+        display: block;
+        font-size: 1.1rem !important;
+        margin: 0;
+    }
+
+    .images-grid {
+        gap: 0.5rem;
+        max-width: 300px;
+    }
+    
+    .game-content-wrapper {
+        gap: 1rem;
+        padding: 0.5rem;
+    }
+    
+    .game-input-section {
+        padding: 1rem;
+    }
+    
+    .word-display {
+        margin-bottom: 1rem;
+    }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sliding Puzzle | Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/slidingImage.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Sliding Puzzle', true, null)}"></header>
+
+    <main class="dashboard-main game-container">
+        <section class="game-card">
+            <div class="section-header">
+                <p class="eyebrow">Sfida Visiva</p>
+                <h3>Ricostruisci l'Immagine</h3>
+                <p>Sposta i tasselli per riordinare il quadro. Clicca su un tassello adiacente allo spazio vuoto per muoverlo.</p>
+            </div>
+
+            <div class="puzzle-game">
+                <div class="puzzle-container">
+                    <div id="puzzle-board" class="puzzle-board">
+                        <!-- Tasselli generati da JS -->
+                    </div>
+                    
+                    <div class="puzzle-preview">
+                        <p class="small-label">Riferimento:</p>
+                        <div class="preview-thumb"></div>
+                    </div>
+                </div>
+
+                <div class="game-info">
+                    <p>Mosse: <span id="moves-count">0</span></p>
+                    <button id="shuffle-btn" class="secondary-btn">Mescola</button>
+                </div>
+
+                <div id="success-message" class="success-message" style="display: none;">
+                    ✨ Ottimo lavoro! Hai ricomposto il quadro!
+                </div>
+            </div>
+
+            <div class="completion-area">
+                <input type="hidden" id="livello-input" th:value="${livello}" />
+                <button id="complete-btn" class="cta" disabled>
+                    <span>Verifica Puzzle</span>
+                    <i class="icon">➔</i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/slidingImage.js}"></script>
+</body>
+
+</html>

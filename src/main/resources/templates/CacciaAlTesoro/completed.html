@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Missione Compiuta | Caccia al Tesoro</title>
+    <meta name="description"
+        content="Hai completato la Caccia al Tesoro 2026. Scopri la tua posizione in classifica." />
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/completed.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Missione Compiuta', false, ${user})}"></header>
+
+    <main class="completed-main">
+        <section class="victory-card">
+            <div class="victory-icon">🏆</div>
+            <h2 class="victory-title">Congratulazioni, <span th:text="${user.realName}">Team Alpha</span>!</h2>
+            <p class="victory-subtitle">Hai completato tutti i 10 quesiti e i 10 luoghi della Caccia al Tesoro 2026.</p>
+
+            <div class="ranking-summary">
+                <div class="rank-box">
+                    <p class="rank-label">Classifica Globale</p>
+                    <p class="rank-value">#<span th:text="${posizione_globale}">1</span></p>
+                </div>
+                <div class="rank-box highlight">
+                    <p class="rank-label">Classifica <span th:text="${user.regione}">Regione</span></p>
+                    <p class="rank-value">#<span th:text="${posizione_locale}">1</span></p>
+                </div>
+            </div>
+
+            <div class="prize-announcement" th:classappend="${posizione_locale == 1} ? 'winner' : 'not-winner'">
+                <div th:if="${posizione_locale == 1}">
+                    <h3>🎉 Hai vinto il premio!</h3>
+                    <p>Sei arrivato 1° nella tua semifinale. Il comparto informatico verificherà il corretto completamento della prova e successivamente la squadra riceverà la <strong>Gift Card Feltrinelli da 20€</strong>!</p>
+                </div>
+                <div th:unless="${posizione_locale == 1}">
+                    <h3>Ottimo lavoro!</h3>
+                    <p>Hai concluso la sfida con successo, ma purtroppo non hai vinto il premio finale (riservato al 1° di ogni sede di semifinale).</p>
+                </div>
+            </div>
+
+            <div class="completed-actions">
+                <a th:href="@{/classifica}" class="cta">Vedi la Classifica Completa</a>
+                <a th:href="@{/}" class="ghost">Torna alla Home</a>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/completed.js}"></script>
+</body>
+
+</html>

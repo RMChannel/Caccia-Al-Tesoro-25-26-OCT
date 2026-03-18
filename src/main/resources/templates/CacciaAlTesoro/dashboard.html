@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard | Caccia al Tesoro</title>
+    <meta name="description"
+        content="Dashboard della Caccia al Tesoro: visualizza i tuoi progressi, i quesiti e la mappa dei luoghi." />
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Caccia al Tesoro 2026', false, ${user})}"></header>
+
+    <main class="dashboard-main">
+
+        <section class="profile-card">
+            <div class="profile-avatar">
+                <span th:text="${#strings.substring(user.username, 0, 1)}">A</span>
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-username" th:text="${user.realName}">Team Alpha</h2>
+                <span class="profile-region" th:text="${user.regione}">Lombardia</span>
+            </div>
+            <div class="profile-stats">
+                <div class="stat-pill">
+                    <p class="stat-label">Quesiti</p>
+                    <p class="stat-value">
+                        <span th:text="${completedQuesiti}">2</span>/10
+                    </p>
+                </div>
+                <div class="stat-pill">
+                    <p class="stat-label">Luoghi</p>
+                    <p class="stat-value">
+                        <span th:text="${completedLuoghi}">2</span>/10
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="progress-bar-container">
+                <p class="progress-label">
+                    Avanzamento generale —
+                    <span th:with="done=(${completedQuesiti} + ${completedLuoghi}), total=20"
+                        th:text="${done} + ':20 (' + ${#numbers.formatDecimal(done * 100.0 / total, 1, 0)} + '%)'">5:20 (25%)</span>
+                </p>
+                <div class="progress-track">
+                    <div class="progress-fill"
+                        th:with="done=(${completedQuesiti} + ${completedLuoghi}), total=20"
+                        th:attr="data-percent=${#numbers.formatDecimal(done * 100.0 / total, 1, 0)}">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <p class="eyebrow">Progressi</p>
+                <h3>I tuoi Quesiti</h3>
+            </div>
+            <div class="quests-grid">
+                <div th:each="uq : ${quesiti}" th:classappend="${uq.completed} ? 'completed' : 'unlocked'"
+                    class="quest-card"
+                    th:onclick="${uq.completed} ? null : 'window.location.href=\'/caccia-al-tesoro/quesito?livello=' + ${uq.quesito.livello} + '\''">
+                    <div class="quest-icon">
+                        <span th:if="${uq.completed}">✓</span>
+                        <span th:unless="${uq.completed}" th:text="${uq.quesito.livello}">1</span>
+                    </div>
+                    <p class="quest-title" th:text="'Quesito ' + ${uq.quesito.livello}">Quesito 1</p>
+                    <p class="quest-status">
+                        <span th:if="${uq.completed}">Completato</span>
+                        <span th:unless="${uq.completed}">Da completare</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="section-header">
+                <p class="eyebrow">Esplorazione</p>
+                <h3>Mappa dei Luoghi</h3>
+            </div>
+
+            <div id="map" th:attr="data-locations=${'{' + '}'}" th:with="locJson=''">
+                <script th:inline="javascript">
+                    (function () {
+                        var locs = [];
+                        /*[# th:each="ul : ${luoghi}"]*/
+                        locs.push({
+                            name:      /*[[${ul.luogo.nome}]]*/       'Luogo',
+                            lat:       /*[[${ul.luogo.coordX}]]*/      45.0,
+                            lng:       /*[[${ul.luogo.coordY}]]*/      9.0,
+                            livello:   /*[[${ul.luogo.livello}]]*/     1,
+                            completed: /*[[${ul.completed}]]*/         false
+                        });
+                        /*[/]*/
+                        document.getElementById('map').setAttribute('data-locations', JSON.stringify(locs));
+                    })();
+                </script>
+            </div>
+
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-dot green"></span>
+                    Completato
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot red"></span>
+                    Da scoprire
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/dashboard.js}"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAa3ZhqHshOTb7aVoyob2l45fMG0FspsaM&callback=initMap">
+        </script>
+</body>
+
+</html>

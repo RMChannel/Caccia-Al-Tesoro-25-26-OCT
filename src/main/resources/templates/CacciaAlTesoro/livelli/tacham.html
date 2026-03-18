@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tacham | Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/tacham.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Tacham', true, null)}"></header>
+
+    <main class="dashboard-main game-container">
+        <section class="game-card">
+            <div class="section-header">
+                <p class="eyebrow">Sfida Visiva</p>
+                <h3>Segui i Colori</h3>
+                <p>Ripeti la sequenza di 6 colori che verrà mostrata. Ad ogni tentativo la combinazione cambia!</p>
+            </div>
+
+            <div class="tacham-game">
+                <div class="sequence-display" id="sequence-display">
+                    <div class="sequence-dot"></div>
+                    <div class="sequence-dot"></div>
+                    <div class="sequence-dot"></div>
+                    <div class="sequence-dot"></div>
+                    <div class="sequence-dot"></div>
+                    <div class="sequence-dot"></div>
+                </div>
+
+                <div class="game-status" id="game-status">
+                    <span class="status-text">Clicca su "Inizia" per vedere la sequenza</span>
+                </div>
+
+                <div class="color-grid" id="color-grid">
+                    <button class="color-btn red disabled" data-color="red"></button>
+                    <button class="color-btn blue disabled" data-color="blue"></button>
+                    <button class="color-btn green disabled" data-color="green"></button>
+                    <button class="color-btn yellow disabled" data-color="yellow"></button>
+                    <button class="color-btn orange disabled" data-color="orange"></button>
+                    <button class="color-btn purple disabled" data-color="purple"></button>
+                </div>
+
+                <div class="controls">
+                    <button id="start-btn" class="cta">
+                        <span>Inizia Gioco</span>
+                        <i class="icon">▶</i>
+                    </button>
+                    <button id="reset-btn" class="cta" style="display: none; background: #6b7280;">
+                        <span>Reset</span>
+                        <i class="icon">↺</i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="completion-area" style="display: none;" id="completion-area">
+                <input type="hidden" id="livello-input" th:value="${livello}" />
+                <button id="complete-btn" class="cta">
+                    <span>Invia Soluzione</span>
+                    <i class="icon">➔</i>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/tacham.js}"></script>
+</body>
+
+</html>

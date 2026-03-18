@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Luoghi - Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/luoghi.css}">
+    <link rel="icon" th:href="@{/photo/logo.png}">
+</head>
+
+<body>
+    <div class="sunwash"></div>
+
+    <header class="site-header">
+        <div class="brand">
+            <div class="brand-mark">CT</div>
+            <div class="brand-text">
+                <div class="brand-eyebrow">Pannello di Controllo</div>
+                <div class="brand-title">Amministrazione</div>
+            </div>
+        </div>
+        <nav class="site-nav">
+            <a th:href="@{/admin}">Utenti</a>
+            <a th:href="@{/admin/luoghi}" class="active">Luoghi</a>
+            <a th:href="@{/admin/support}">Supporto</a>
+            <a th:href="@{/logout}" style="color: #ef4444;">Esci</a>
+        </nav>
+    </header>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Gestione Luoghi</h1>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger">
+            <span th:if="${param.error[0] == 'luogo_not_found'}">Errore: Luogo non trovato.</span>
+            <span th:if="${param.error[0] == 'regione_not_valid'}">Errore: Regione non valida.</span>
+            <span th:unless="${param.error[0] == 'luogo_not_found' or param.error[0] == 'regione_not_valid'}"
+                th:text="${'Errore: ' + param.error[0]}">Errore generico.</span>
+        </div>
+
+        <div class="admin-card">
+            <div class="card-header-flex">
+                <h2>Elenco Luoghi</h2>
+                <div class="table-filters">
+                    <div class="search-input-group">
+                        <input type="text" id="luogoSearch" placeholder="Cerca per nome..." class="admin-input">
+                    </div>
+                    <div class="filter-select-group">
+                        <select id="regionFilter" class="admin-select-small">
+                            <option value="">Tutte le Regioni</option>
+                            <option value="NORD-BRA">NORD-BRA</option>
+                            <option value="CENTRO-CIVITAVECCHIA">CENTRO-CIVITAVECCHIA</option>
+                            <option value="SUD-MELFI">SUD-MELFI</option>
+                            <option value="SUD-ENNA">SUD-ENNA</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="admin-table-container">
+                <table class="admin-table" id="luoghiTable">
+                    <thead>
+                        <tr>
+                            <th>Livello</th>
+                            <th>Regione</th>
+                            <th>Nome</th>
+                            <th>Codice</th>
+                            <th>Coordinate</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="l : ${luoghi}">
+                            <td th:text="${l.livello}">1</td>
+                            <td th:text="${l.regione}">NORD</td>
+                            <td th:text="${l.nome}">Nome Luogo</td>
+                            <td><code th:text="${l.codice}">ABCDEF</code></td>
+                            <td th:text="${l.coordX + ', ' + l.coordY}">0, 0</td>
+                            <td>
+                                <button class="action-btn edit-luogo-btn" 
+                                    th:data-livello="${l.livello}"
+                                    th:data-regione="${l.regione}"
+                                    th:data-nome="${l.nome}"
+                                    th:data-codice="${l.codice}"
+                                    th:data-indizio="${l.indizio}"
+                                    th:data-description="${l.description}"
+                                    th:data-photo="${l.descriptionPhoto}">Modifica</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Modifica Luogo -->
+    <div id="modal-edit-luogo" class="modal">
+        <div class="modal-overlay" onclick="closeModal('modal-edit-luogo')"></div>
+        <div class="modal-card" style="max-width: 700px;">
+            <button class="modal-close" onclick="closeModal('modal-edit-luogo')">&times;</button>
+            <h3>Modifica Luogo</h3>
+            <p>Aggiorna i dettagli per <strong id="edit-luogo-name-display"></strong>.</p>
+            <form th:action="@{/admin/update-luogo}" method="POST" class="login-form">
+                <input type="hidden" name="livello" id="edit-livello">
+                <input type="hidden" name="regione" id="edit-regione">
+
+                <div class="form-grid">
+                    <label>
+                        Nome Luogo
+                        <input type="text" name="nome" id="edit-nome" required placeholder="Nome del luogo">
+                    </label>
+                    <label>
+                        Codice Sblocco (6 caratteri)
+                        <input type="text" name="codice" id="edit-codice" required minlength="7" maxlength="7" placeholder="ABCDEF">
+                    </label>
+                </div>
+
+                <label>
+                    Indizio
+                    <textarea name="indizio" id="edit-indizio" required rows="3" placeholder="Indizio per trovare il luogo"></textarea>
+                </label>
+
+                <label>
+                    Descrizione (mostrata dopo lo sblocco)
+                    <textarea name="description" id="edit-description" required rows="5" placeholder="Descrizione storica o curiosità"></textarea>
+                </label>
+
+                <label>
+                    URL Foto Descrizione
+                    <input type="text" name="descriptionPhoto" id="edit-photo" required placeholder="https://esempio.it/foto.jpg">
+                </label>
+
+                <button type="submit" class="cta full">Salva Modifiche</button>
+            </form>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/luoghi.js}"></script>
+    <script>
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+    </script>
+</body>
+
+</html>

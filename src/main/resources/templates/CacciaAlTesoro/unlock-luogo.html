@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sblocca Luogo | Caccia al Tesoro</title>
+    <meta name="description" content="Scansiona il codice QR per sbloccare il luogo nella Caccia al Tesoro." />
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/unlock-luogo.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Caccia al Tesoro 2026', false, ${user})}"></header>
+
+    <main class="unlock-main">
+
+        <a th:href="@{/caccia}" class="back-link">← Torna alla Dashboard</a>
+
+        <section class="scanner-card">
+            <div class="section-header">
+                <p class="eyebrow">Scansione</p>
+                <h3>Scanner QR</h3>
+                <p class="scanner-subtitle">
+                    Inquadra il codice QR presente nel luogo per sbloccarlo.
+                </p>
+            </div>
+
+            <div id="qr-reader"></div>
+
+            <form id="unlock-form" method="post" th:action="@{/unlock-luogo}">
+                <input type="hidden" name="livello" th:value="${luogo.livello}" />
+                <div class="result-group">
+                    <input type="text" id="qr-result" name="codice" class="result-input"
+                        style="text-transform: uppercase;"
+                        placeholder="Scansiona il QR o inserisci il codice manualmente…" />
+                    <button type="submit" id="btn-verifica" class="btn-verifica">
+                        🔍 Verifica
+                    </button>
+                </div>
+                <div th:if="${codeNotCorrect}" class="error-message">
+                    ⚠️ Codice errato. Riprova scansionando il QR o inserendo il codice corretto.
+                </div>
+            </form>
+        </section>
+
+        <section class="location-card">
+            <div class="section-header">
+                <p class="eyebrow">Dettagli</p>
+                <h3 th:text="${luogo.nome}">Nome del Luogo</h3>
+            </div>
+
+            <div class="location-details-grid">
+                <div class="detail-tile">
+                    <span class="detail-icon">📍</span>
+                    <span class="detail-label">Nome</span>
+                    <span class="detail-value" th:text="${luogo.nome}">Piazza Duomo</span>
+                </div>
+                <div class="detail-tile">
+                    <span class="detail-icon">🏷️</span>
+                    <span class="detail-label">Livello</span>
+                    <span class="detail-value" th:text="${luogo.livello}">1</span>
+                </div>
+                <div class="detail-tile">
+                    <span class="detail-icon">🌍</span>
+                    <span class="detail-label">Regione</span>
+                    <span class="detail-value" th:text="${luogo.regione}">Lombardia</span>
+                </div>
+                <div class="detail-tile">
+                    <span class="detail-icon">📐</span>
+                    <span class="detail-label">Coordinate</span>
+                    <span class="detail-value">
+                        <span th:text="${luogo.coordX}">45.0</span>,
+                        <span th:text="${luogo.coordY}">9.0</span>
+                    </span>
+                </div>
+                <div class="detail-tile detail-tile--indizio" th:if="${luogo.indizio != null}">
+                    <span class="detail-icon">🔎</span>
+                    <span class="detail-label">Indizio</span>
+                    <span class="detail-value" th:text="${luogo.indizio}">Indizio non disponibile</span>
+                </div>
+            </div>
+
+            <div class="location-map-section">
+                <p class="map-subtitle">📌 Posizione sulla mappa</p>
+                <div id="location-map"
+                    th:attr="data-lat=${luogo.coordX}, data-lng=${luogo.coordY}, data-name=${luogo.nome}">
+                </div>
+                <a class="directions-link"
+                    th:href="'https://www.google.com/maps/dir/?api=1&destination=' + ${luogo.coordX} + ',' + ${luogo.coordY}"
+                    target="_blank" rel="noopener">
+                    📍 Indicazioni stradali
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script th:src="@{/js/unlock-luogo.js}"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAa3ZhqHshOTb7aVoyob2l45fMG0FspsaM&callback=initLocationMap">
+        </script>
+</body>
+
+</html>

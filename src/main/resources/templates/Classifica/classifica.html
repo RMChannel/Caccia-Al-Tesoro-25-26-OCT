@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classifica • OCT 2026</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/classifica.css}">
+    <script th:src="@{/js/classifica.js}" defer></script>
+</head>
+
+<body>
+    <div class="sunwash"></div>
+
+    <!-- Header Fragment -->
+    <header th:replace="~{fragments/header :: header('Classifica Live', true, ${user})}"></header>
+
+    <main class="classifica-main">
+        <section class="section-title">
+            <p class="eyebrow">Real-Time Update</p>
+            <h3>Classifica Generale</h3>
+            <p style="color: var(--ink-soft);">La classifica si aggiorna automaticamente ogni 10 secondi.</p>
+        </section>
+
+        <div class="classifica-controls" style="margin-bottom: 24px; display: flex; justify-content: flex-end;">
+            <select id="regione-filter"
+                style="padding: 10px 16px; border-radius: 12px; border: 1px solid var(--line); font-family: inherit; font-size: 0.95rem; font-weight: 600; color: var(--ink); background: var(--surface); cursor: pointer; outline: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.2s ease;">
+                <option value="ALL">Tutte le Regioni</option>
+                <option value="NORD-BRA">BRA</option>
+                <option value="CENTRO-CIVITAVECCHIA">CENTRO</option>
+                <option value="SUD-MELFI">MELFI</option>
+                <option value="SUD-ENNA">ENNA</option>
+            </select>
+        </div>
+
+        <div class="classifica-container">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Pos.</th>
+                        <th>Team</th>
+                        <th>Regione</th>
+                        <th>Punti</th>
+                        <th>Orario completamento</th>
+                        <th>Stato</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                    <!-- Thymeleaf initial render -->
+                    <tr th:each="entry, stat : ${leaderboard}" class="leaderboard-row"
+                        th:classappend="${stat.index < 3} ? 'top-' + (${stat.index} + 1) : ''"
+                        th:data-regione="${entry.regione}">
+                        <td>
+                            <div class="rank-badge" th:text="${stat.index + 1}">1</div>
+                        </td>
+                        <td>
+                            <div class="team-name">
+                                <div class="team-avatar"
+                                    th:text="${#strings.substring(entry.username,0,1).toUpperCase()}">A</div>
+                                <span th:text="${entry.username}">Team Alpha</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="regione-badge" th:with="r=${entry.regione}" 
+                                  th:text="${r == 'NORD-BRA' ? 'BRA' : (r == 'CENTRO-CIVITAVECCHIA' ? 'CENTRO' : (r == 'SUD-MELFI' ? 'MELFI' : (r == 'SUD-ENNA' ? 'ENNA' : r)))}"></span>
+                        </td>
+                        <td>
+                            <span class="score-value" th:text="${entry.score} + '/20'">10/20</span>
+                        </td>
+                        <td>
+                            <span class="time-value"
+                                th:text="${entry.completedAt != null ? entry.completedAt : '--:--'}">--:--</span>
+                        </td>
+                        <td>
+                            <span
+                                th:class="${entry.completed} ? 'status-indicator status-online' : 'status-indicator status-offline'"></span>
+                            <span th:text="${entry.completed} ? 'Completato' : 'In Corso'"
+                                style="font-weight: 600; font-size: 0.9rem;"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Footer Fragment -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+
+</html>

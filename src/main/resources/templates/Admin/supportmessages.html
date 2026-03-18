@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCT - Gestione Supporto</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="icon" type="image/png" th:href="@{/photo/logo.png}">
+    <style>
+        .msg-preview {
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--ink-soft);
+            font-size: 0.85rem;
+        }
+        .message-detail-box {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--bg-2);
+            border-radius: 16px;
+            border: 1px solid var(--line);
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--ink);
+            line-height: 1.6;
+        }
+        .modal-info-item {
+            margin-bottom: 12px;
+            display: flex;
+            gap: 8px;
+        }
+        .modal-info-label {
+            font-weight: 700;
+            color: var(--ink-soft);
+            min-width: 80px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sunwash" aria-hidden="true"></div>
+
+<header class="site-header">
+    <div class="brand">
+        <div class="brand-mark">CT</div>
+        <div class="brand-text">
+            <div class="brand-eyebrow">Pannello di Controllo</div>
+            <div class="brand-title">Amministrazione</div>
+        </div>
+    </div>
+    <nav class="site-nav">
+        <a th:href="@{/admin}">Utenti</a>
+        <a th:href="@{/admin/luoghi}">Luoghi</a>
+        <a th:href="@{/admin/support}" class="active" style="color: var(--accent); font-weight: 700;">Supporto</a>
+        <a th:href="@{/logout}" style="color: #ef4444;">Esci</a>
+    </nav>
+</header>
+
+<main class="admin-container">
+    <div class="admin-header">
+        <h1 class="admin-title">Messaggi di Supporto</h1>
+        <div class="admin-actions" th:if="${not #lists.isEmpty(messaggi)}">
+            <form th:action="@{/admin/remove-all-messages}" method="post" 
+                  onsubmit="return confirm('Sei sicuro di voler eliminare TUTTI i messaggi?')">
+                <button type="submit" class="cta danger">
+                    Elimina Tutti
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>Data e Ora</th>
+                    <th>Email</th>
+                    <th>Categoria</th>
+                    <th>Anteprima</th>
+                    <th>Azioni</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${messaggi}">
+                    <td th:text="${#dates.format(m.data, 'dd/MM/yyyy HH:mm')}">Data</td>
+                    <td>
+                        <div style="font-weight: 600;" th:text="${m.email}">Email</div>
+                    </td>
+                    <td>
+                        <span class="badge" 
+                              th:classappend="${m.categoria == 'Bug' ? 'badge-warning' : 'badge-success'}"
+                              th:text="${m.categoria}">Categoria</span>
+                    </td>
+                    <td>
+                        <div class="msg-preview" th:text="${m.messaggio}">Messaggio...</div>
+                    </td>
+                    <td>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="action-btn" title="Visualizza"
+                                    th:onclick="openMessageModal([[${m.email}]], [[${m.categoria}]], [[${#dates.format(m.data, 'dd/MM/yyyy HH:mm')}]], [[${m.messaggio}]])">
+                                Leggi
+                            </button>
+                            <form th:action="@{/admin/remove-message}" method="post" onsubmit="return confirm('Eliminare questo messaggio?')">
+                                <input type="hidden" name="id" th:value="${m.id}">
+                                <button type="submit" class="action-btn danger" title="Elimina">
+                                    Elimina
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(messaggi)}">
+                    <td colspan="5" style="text-align: center; padding: 48px; color: var(--ink-soft);">
+                        Non ci sono messaggi di supporto.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Modale Dettaglio Messaggio -->
+<div id="modal-message" class="modal">
+    <div class="modal-overlay" onclick="closeMessageModal()"></div>
+    <div class="modal-card" style="max-width: 650px;">
+        <button class="modal-close" onclick="closeMessageModal()">&times;</button>
+        <h3>Dettaglio Messaggio</h3>
+        
+        <div class="modal-scrollable-content">
+            <div class="modal-info-item">
+                <span class="modal-info-label">Da:</span>
+                <span id="msg-email" style="color: var(--accent); font-weight: 600;"></span>
+            </div>
+            <div class="modal-info-item">
+                <span class="modal-info-label">Categoria:</span>
+                <span id="msg-categoria" class="badge badge-success"></span>
+            </div>
+            <div class="modal-info-item">
+                <span class="modal-info-label">Inviato:</span>
+                <span id="msg-data"></span>
+            </div>
+            
+            <div style="margin-top: 24px;">
+                <div class="modal-info-label">Messaggio:</div>
+                <div id="msg-testo" class="message-detail-box"></div>
+            </div>
+        </div>
+
+        <button class="cta full" style="margin-top: 24px;" onclick="closeMessageModal()">Chiudi</button>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+<script>
+    function openMessageModal(email, categoria, data, messaggio) {
+        document.getElementById('msg-email').innerText = email;
+        document.getElementById('msg-categoria').innerText = categoria;
+        document.getElementById('msg-data').innerText = data;
+        document.getElementById('msg-testo').innerText = messaggio;
+        
+        document.getElementById('modal-message').classList.add('show');
+    }
+
+    function closeMessageModal() {
+        document.getElementById('modal-message').classList.remove('show');
+    }
+
+    // Chiudi con ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMessageModal();
+    });
+</script>
+
+</body>
+</html>

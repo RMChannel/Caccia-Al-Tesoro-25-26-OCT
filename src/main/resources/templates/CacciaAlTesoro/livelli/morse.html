@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codice Morse | Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/morse.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Sfida: Codice Cromatico', true, null)}"></header>
+
+    <main class="dashboard-main game-container">
+        <section class="game-card">
+            <div class="section-header">
+                <h3>Decifra la Sequenza</h3>
+                <p>Analizza attentamente i colori. Potrebbero nascondere un messaggio.</p>
+            </div>
+
+            <div class="morse-container">
+                <div class="morse-code-display">
+                    <p class="morse-sequence">
+                        🟩🟩🟥🟩 🟥🟥🟩 🟥🟩 🟥🟩🟥🟥<br/>
+                        🟥🟩🟥🟥🟩  🟥🟥 🟥🟩🟥🟥  🟩🟥<br/>
+                        🟩🟩🟩 🟩🟩 🟥  🟩🟥 🟩🟩🟩 🟩🟩 🟥<br/>
+                        🟩🟩🟩 🟥🟩🟥 🟥🟥 🟩🟩🟥 🟥🟥 🟩🟥<br/>
+                        🟥🟩 🟥🟩🟥🟥 🟥  🟩🟥🟥 🟥 🟥🟩🟥🟥<br/>
+                        🟥🟩🟥🟥  🟥 🟥🟩🟥🟥 🟥 🟩🟩 🟥<br/>
+                        🟩🟥 🟩 🟩🟩🟩  🟩🟩🟥🟥🟥 🟥🟥🟥🟥🟩<br/>
+                        🟩🟥🟥 🟥 🟥🟩🟥🟥 🟥🟩🟥🟥 🟥🟩<br/>
+                        🟩 🟥🟩 🟥🟥🟥🟩 🟩🟩🟩 🟥🟩🟥🟥 🟥🟩<br/>
+                        🟥🟩🟩🟥 🟥 🟥🟩🟥 🟥🟥 🟩🟩🟩<br/>
+                        🟩🟥🟥 🟥🟥 🟩🟥🟩🟥 🟥🟩 🟥🟥🟩🟩🟥🟥
+                    </p>
+                </div>
+
+                <div class="morse-input-section">
+                    <div class="input-group">
+                        <label for="solution-input">Il messaggio decifrato</label>
+                        <input type="text" id="solution-input" class="morse-input" placeholder="Scrivi qui..." autocomplete="off" />
+                    </div>
+                    
+                    <input type="hidden" id="livello-input" th:value="${livello}" />
+                    
+                    <div id="error-message" class="error-message"></div>
+                    
+                    <button id="verify-btn" class="btn-verify">Verifica</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/morse.js}"></script>
+</body>
+
+</html>

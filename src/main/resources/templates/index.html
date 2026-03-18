@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Olimpiadi della Cultura e del Talento | Caccia al Tesoro</title>
+  <meta name="description"
+    content="Caccia al tesoro delle Olimpiadi della Cultura e del Talento: enigmi, QR code e storia interattiva nel cuore della città." />
+  <link rel="stylesheet" th:href="@{/css/home.css}" />
+</head>
+
+<body>
+  <div class="sunwash" aria-hidden="true"></div>
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">OCT</span>
+      <div class="brand-text">
+        <p class="brand-eyebrow">Olimpiadi della Cultura e del Talento</p>
+        <h1 class="brand-title">Caccia al Tesoro 2026</h1>
+      </div>
+    </div>
+    <nav class="site-nav" aria-label="Principale">
+      <a th:href="@{/regolamento}">Regolamento</a>
+      <a th:href="@{/classifica}">Classifica</a>
+      <button class="cta" data-open-login>Accedi</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <h2>Un viaggio a tappe tra QR code, enigmi e una storia che vive nei luoghi.</h2>
+        <p>
+          Tutte le squadre partiranno con 2 giochi e 2 QRCode già sbloccati e da scoprire.
+          Ogni volta che viene trovato un QRCode si sbloccherà sulla mappa un nuovo luogo da visitare.
+          La 1°squadra di ogni semifinale che avrà risolto i 10 quesiti ed esplorato i 10 luoghi vincerà una <strong>Gift Card Feltrinelli dal valore di 20€</strong>.
+        </p>
+        <div class="hero-actions">
+          <button class="cta" data-open-login>Entra nel gioco</button>
+          <a class="ghost" th:href="@{/regolamento}">Scopri le regole</a>
+        </div>
+      </div>
+      <div class="hero-card" role="presentation">
+        <div class="hero-card-top">
+          <div>
+            <p class="label">Stato missione</p>
+            <p class="value">Pronti al decollo</p>
+          </div>
+          <span class="badge">Progressi live</span>
+        </div>
+        <div class="hero-card-grid">
+          <div class="tile">
+            <p>QR Code</p>
+            <strong>2/10</strong>
+          </div>
+          <div class="tile">
+            <p>Giochi</p>
+            <strong>2/10</strong>
+          </div>
+          <div class="tile">
+            <p>Enigmi</p>
+            <strong>10</strong>
+          </div>
+          <div class="tile">
+            <p>Storia</p>
+            <strong>Inizio</strong>
+          </div>
+        </div>
+        <div class="hero-card-footer">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-green"></span>
+          <p>Indicatori di avanzamento in tempo reale</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="come-funziona" class="section">
+      <div class="section-title">
+        <h3>Come funziona il gioco</h3>
+      </div>
+      <div class="flow-grid">
+        <article>
+          <h4>1. Punto di partenza</h4>
+          <p>
+            Una domanda finale anticipata introduce la storia. Qui si apre la prima tappa e si definisce il contesto del
+            luogo.
+          </p>
+        </article>
+        <article>
+          <h4>2. Progressione a incastro</h4>
+          <p>
+            QR code scansionato → nuovo gioco. Gioco completato → nuovo QR code. Lo schema prosegue fino al completamento di tutte le tappe.
+          </p>
+        </article>
+        <article>
+          <h4>3. Percorso a tappe</h4>
+          <p>
+            Ogni QR code corrisponde a un luogo con storia dedicata. Le tappe si aprono progressivamente seguendo la
+            logica di sblocco.
+          </p>
+        </article>
+        <article>
+          <h4>4. 10 domande e 10 luoghi</h4>
+          <p>
+            Dieci domande sbloccano i punti di interesse. Dopo aver completato i 10 quesiti e i 10 luoghi vince il 1° di ogni semifinale con una <strong>Gift Card Feltrinelli da 20€</strong>.
+          </p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+  <div class="modal" data-login-modal aria-hidden="true">
+    <div class="modal-overlay" data-close-login></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      <button class="modal-close" type="button" data-close-login aria-label="Chiudi">×</button>
+      <h3 id="login-title">Accedi alla missione</h3>
+      <p>Inserisci le credenziali del team per continuare.</p>
+      <form class="login-form" method="post" th:action="@{/login}">
+        <label>
+          Username
+          <input type="text" name="username" placeholder="username" required />
+        </label>
+        <label>
+          Password
+          <div class="password-wrap">
+            <input type="password" name="password" id="password" placeholder="••••••••" required />
+            <button type="button" id="togglePassword" class="toggle-password" aria-label="Mostra password">
+              <img th:src="@{/photo/eye.png}" id="eyeIcon" alt="Icona occhio" />
+            </button>
+          </div>
+        </label>
+        <p class="login-error" th:if="${param.error}">Credenziali errate. Riprova.</p>
+        <button type="submit" class="cta full">Accedi</button>
+        <p class="login-note">Non hai un accesso? Chiedilo al tuo tutor.</p>
+      </form>
+    </div>
+  </div>
+
+  <script th:src="@{/js/home.js}"></script>
+</body>
+
+</html>

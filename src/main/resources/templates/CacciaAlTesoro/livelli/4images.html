@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>4 Immagini 1 Parola | Caccia al Tesoro</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/4images.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Sfida: 4 Immagini 1 Parola', true, null)}"></header>
+
+    <main class="dashboard-main game-container">
+        <section class="game-card">
+            <div class="section-header">
+                <p class="eyebrow">Enigma Visivo</p>
+                <h3>Cosa accomuna queste immagini?</h3>
+                <p>Trova la parola nascosta</p>
+            </div>
+
+            <div class="game-content-wrapper">
+                <div class="images-grid">
+                    <div class="image-box">
+                        <img th:src="@{/photo/4images/1.png}" alt="Immagine 1" />
+                    </div>
+                    <div class="image-box">
+                        <img th:src="@{/photo/4images/2.jpg}" alt="Immagine 2" />
+                    </div>
+                    <div class="image-box">
+                        <img th:src="@{/photo/4images/3.png}" alt="Immagine 3" />
+                    </div>
+                    <div class="image-box">
+                        <img th:src="@{/photo/4images/4.png}" alt="Immagine 4" />
+                    </div>
+                </div>
+
+                <div class="game-input-section">
+                    <div id="word-display" class="word-display">
+                        <!-- Will be populated by JS -->
+                    </div>
+
+                    <div class="input-group">
+                        <label for="solution-input">La tua soluzione</label>
+                        <input type="text" id="solution-input" class="game-input" placeholder="Scrivi qui..." autocomplete="off" maxlength="6" />
+                    </div>
+                    
+                    <input type="hidden" id="livello-input" th:value="${livello}" />
+                    
+                    <div id="error-message" class="error-message"></div>
+                    
+                    <div id="timer-display" class="timer-display" style="display: none;">
+                        <span class="timer-icon">⏳</span>
+                        <span>Riprova tra <strong id="countdown">30</strong> secondi</span>
+                    </div>
+                    
+                    <button id="verify-btn" class="btn-verify">Verifica</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/4images.js}"></script>
+</body>
+
+</html>

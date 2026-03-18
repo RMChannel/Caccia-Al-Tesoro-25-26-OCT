@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Descrizione Luogo | Caccia al Tesoro</title>
+    <meta name="description" content="Dettagli e storia del luogo sbloccato nella Caccia al Tesoro." />
+    <link rel="stylesheet" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" th:href="@{/css/luogo-description.css}" />
+</head>
+
+<body>
+    <div class="sunwash" aria-hidden="true"></div>
+
+    <header th:replace="~{fragments/header :: header('Caccia al Tesoro 2026', false, ${user})}"></header>
+
+    <main class="description-main">
+
+        <section class="description-card">
+            <div class="section-header">
+                <p class="eyebrow">Luogo Sbloccato</p>
+                <h3 th:text="${luogo.nome}">Nome del Luogo</h3>
+            </div>
+
+            <div class="description-content">
+                <div class="photo-container" th:if="${luogo.descriptionPhoto != null && !luogo.descriptionPhoto.isEmpty()}">
+                    <img th:src="${luogo.descriptionPhoto}" alt="Foto del luogo" class="location-photo" />
+                </div>
+
+                <div class="text-container">
+                    <p class="description-text" th:text="${luogo.description}">
+                        Descrizione del luogo non disponibile.
+                    </p>
+                </div>
+            </div>
+
+            <div class="action-footer">
+                <a th:href="@{/caccia(unlockLuogo=true)}" class="btn-continua">
+                    Continua ➔
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:src="@{/js/luogo-description.js}"></script>
+</body>
+
+</html>

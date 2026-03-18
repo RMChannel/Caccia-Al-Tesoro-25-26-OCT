@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCT - Messaggio Inviato</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="icon" type="image/png" th:href="@{/photo/logo.png}">
+    <style>
+        .success-container {
+            max-width: 600px;
+            margin: 100px auto 60px;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .success-card {
+            background: var(--surface);
+            padding: 48px 32px;
+            border-radius: 24px;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+        .success-icon {
+            font-size: 64px;
+            color: #10B981;
+            margin-bottom: 24px;
+            display: block;
+        }
+        .success-title {
+            font-family: "DM Serif Display", serif;
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+            color: var(--ink);
+        }
+        .success-message {
+            color: var(--ink-soft);
+            margin-bottom: 32px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sunwash" aria-hidden="true"></div>
+
+<header th:replace="~{fragments/header :: header('Messaggio Inviato', false, ${user})}"></header>
+
+<main class="success-container">
+    <div class="success-card">
+        <span class="success-icon">✓</span>
+        <h1 class="success-title">Messaggio Inviato!</h1>
+        <p class="success-message">Il tuo messaggio è stato ricevuto con successo. Ti risponderemo il prima possibile all'indirizzo email fornito.</p>
+
+        <a th:href="@{/}" class="cta full">
+            Torna alla Home
+        </a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

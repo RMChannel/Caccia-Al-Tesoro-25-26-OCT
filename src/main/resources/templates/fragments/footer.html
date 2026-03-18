@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <footer th:fragment="footer" class="site-footer">
+        <div>
+            <p class="footer-title">Olimpiadi della Cultura e del Talento</p>
+            <p class="footer-sub">Caccia al Tesoro • Edizione 2026</p>
+            <p class="footer-sub">Made by <a href="https://github.com/RMChannel" target="_blank" style="text-decoration: underline; color: inherit;">Cito Roberto</a></p>
+        </div>
+        <div class="footer-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/classifica}">Classifica</a>
+            <a th:href="@{/regolamento}">Regolamento</a>
+            <a th:href="@{/support}">Supporto</a>
+        </div>
+    </footer>
+</body>
+</html>
