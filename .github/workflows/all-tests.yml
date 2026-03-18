@@ -1,0 +1,255 @@
+name: All-Tests
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  # ──────────────────────────────────────────────
+  #  1. Build + Integration Test (RunningTest)
+  # ──────────────────────────────────────────────
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test RunningTest
+        env:
+          DB_URL: jdbc:h2:mem:testdb
+          DB_USER: sa
+          DB_PASS: ""
+          EMAIL: test@test.com
+          EMAIL_PASSWORD: fake
+        run: mvn -B test -Dtest=com.oct.caccia_al_tesorov2.RunningTest -Dspring.profiles.active=test
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: "Test Results (RunningTest)"
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: false
+
+  # ──────────────────────────────────────────────
+  #  2. Entity & Utility Tests (parallel)
+  # ──────────────────────────────────────────────
+  entity-tests:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test Entity & Utility classes
+        env:
+          DB_URL: jdbc:h2:mem:testdb
+          DB_USER: sa
+          DB_PASS: ""
+          EMAIL: test@test.com
+          EMAIL_PASSWORD: fake
+        run: >
+          mvn -B test
+          -Dtest="com.oct.caccia_al_tesorov2.Model.Luogo.LuogoEntityTest,
+          com.oct.caccia_al_tesorov2.Model.Users.UserEntityTest,
+          com.oct.caccia_al_tesorov2.Model.Users.PasswordUtilityTest,
+          com.oct.caccia_al_tesorov2.Model.Users.CustomUserDetailsTest,
+          com.oct.caccia_al_tesorov2.Model.ActivateGameServiceTest"
+          -Dspring.profiles.active=test
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: "Test Results (Entity & Utility)"
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: false
+
+  # ──────────────────────────────────────────────
+  #  3. Service Tests (parallel)
+  # ──────────────────────────────────────────────
+  service-tests:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test Service layer
+        env:
+          DB_URL: jdbc:h2:mem:testdb
+          DB_USER: sa
+          DB_PASS: ""
+          EMAIL: test@test.com
+          EMAIL_PASSWORD: fake
+        run: >
+          mvn -B test
+          -Dtest="com.oct.caccia_al_tesorov2.Model.ClassificaServiceTest,
+          com.oct.caccia_al_tesorov2.Model.Luogo.LuogoServiceTest,
+          com.oct.caccia_al_tesorov2.Model.Quesito.QuesitoServiceTest,
+          com.oct.caccia_al_tesorov2.Model.Relazioni.UnlockLuogo.UnlockLuogoServiceTest,
+          com.oct.caccia_al_tesorov2.Model.Relazioni.UnlockQuesito.UnlockQuesitoServiceTest,
+          com.oct.caccia_al_tesorov2.Model.Support.SupportServiceTest,
+          com.oct.caccia_al_tesorov2.Model.Users.CustomUserDetailsServiceTest"
+          -Dspring.profiles.active=test
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: "Test Results (Services)"
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: false
+
+  # ──────────────────────────────────────────────
+  #  4. Controller Tests (parallel)
+  # ──────────────────────────────────────────────
+  controller-tests:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test Controllers
+        env:
+          DB_URL: jdbc:h2:mem:testdb
+          DB_USER: sa
+          DB_PASS: ""
+          EMAIL: test@test.com
+          EMAIL_PASSWORD: fake
+        run: >
+          mvn -B test
+          -Dtest="com.oct.caccia_al_tesorov2.Controller.Login.HomeControllerTest,
+          com.oct.caccia_al_tesorov2.Controller.Classifica.ClassificaControllerTest,
+          com.oct.caccia_al_tesorov2.Controller.Support.SupportControllerTest"
+          -Dspring.profiles.active=test
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: "Test Results (Controllers)"
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: false
+
+  # ──────────────────────────────────────────────
+  #  5. Security Tests (parallel)
+  # ──────────────────────────────────────────────
+  security-tests:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Test Security Config
+        env:
+          DB_URL: jdbc:h2:mem:testdb
+          DB_USER: sa
+          DB_PASS: ""
+          EMAIL: test@test.com
+          EMAIL_PASSWORD: fake
+        run: >
+          mvn -B test
+          -Dtest="com.oct.caccia_al_tesorov2.SecurityConfigTest"
+          -Dspring.profiles.active=test
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: "Test Results (Security)"
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: false
+
+  # ──────────────────────────────────────────────
+  #  6. Build JAR Artifact (after all tests pass)
+  # ──────────────────────────────────────────────
+  build-jar:
+    needs: [build-and-test, entity-tests, service-tests, controller-tests, security-tests]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build JAR (skip tests)
+        env:
+          DB_URL: jdbc:h2:mem:testdb
+          DB_USER: sa
+          DB_PASS: ""
+          EMAIL: test@test.com
+          EMAIL_PASSWORD: fake
+        run: mvn -B package -DskipTests -Dspring.profiles.active=test
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: caccia-al-tesoro-jar
+          path: target/*.jar
+          retention-days: 30
