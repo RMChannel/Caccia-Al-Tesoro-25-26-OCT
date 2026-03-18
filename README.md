@@ -32,7 +32,6 @@ Il sistema possiede un meccanismo di smistaggio che permette alle singole squadr
 *   [Installazione e Configurazione (Java)](#-installazione-e-configurazione-java)
 *   [Deployment con Docker](#-deployment-con-docker)
 *   [Utilizzo e Credenziali](#-utilizzo-e-credenziali)
-*   [Crediti](#-crediti)
 
 ---
 
