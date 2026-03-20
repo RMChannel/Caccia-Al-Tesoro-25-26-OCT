@@ -141,7 +141,7 @@ Questa sezione guida alla configurazione manuale dell'ambiente di sviluppo local
 
 4.  **Esecuzione Locale:**
     ```bash
-    java -jar target/CacciaAlTesoro_V2-0.0.1-SNAPSHOT.jar
+    java -jar target/CacciaAlTesoro_V2-2.0.jar
     ```
     Oppure sfruttare il Maven Wrapper:
     ```bash
